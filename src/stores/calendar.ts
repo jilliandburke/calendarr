@@ -4,17 +4,25 @@ import { add, format } from 'date-fns'
 import type { SonarrEvent, CalendarEvent } from '@/types'
 
 export const useCalendarStore = defineStore('calendar', () => {
-  let events: CalendarEvent[] = []
+  const events: CalendarEvent[] = []
 
-  async function getSonarrCalendar() {
+  async function getSonarrCalendar(start?: string, end?: string) {
     try {
-      const data = await sonarr.getSonarrCalendar();
+      const data = await sonarr.getSonarrCalendar(formatToDate(start), formatToDate(end));
 
       formatSonarrEvents(data?.data)
 
       return events
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  function formatToDate(date: string | undefined) {
+    if (typeof date === 'string') {
+      const temp = new Date(date)
+
+      return temp.toUTCString()
     }
   }
 

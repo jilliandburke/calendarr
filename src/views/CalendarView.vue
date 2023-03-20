@@ -3,14 +3,6 @@ import { Qalendar } from "qalendar";
 import { useCalendarStore } from '../stores/calendar'
 import { ref, onBeforeMount } from 'vue';
 
-const calendarStore = useCalendarStore()
-
-const eventsV2 = ref()
-
-onBeforeMount(async () => {
-  eventsV2.value = await calendarStore.getSonarrCalendar()
-})
-
 const qalendarConfig = {
   defaultMode: 'month',
   style: {
@@ -34,11 +26,22 @@ const qalendarConfig = {
     },
   },
 }
+const calendarStore = useCalendarStore()
+const eventsV2 = ref()
+
+onBeforeMount(async () => {
+  eventsV2.value = await calendarStore.getSonarrCalendar()
+})
+
+function updateTimeframe($event: { start: string, end: string}) {
+  const { start, end } = $event
+  calendarStore.getSonarrCalendar(start, end)
+}
 
 </script>
 
 <template>
-  <Qalendar :events="eventsV2" :config="qalendarConfig" />
+  <Qalendar :events="eventsV2" @updated-period="updateTimeframe($event)" :config="qalendarConfig" />
 </template>
 
 <style>
