@@ -5,6 +5,7 @@ import { ref, onBeforeMount } from 'vue';
 
 const qalendarConfig = {
   defaultMode: 'month',
+  showCurrentTime: true,
   style: {
     colorSchemes: {
       sonarr: {
@@ -17,11 +18,11 @@ const qalendarConfig = {
       },
       radarr: {
         color: "#fff",
-        backgroundColor: "#ff4081",
+        backgroundColor: "#ffc230",
       },
       radarrDownloaded: {
         color: "#fff",
-        backgroundColor: "#ff4081",
+        backgroundColor: "#2E7D32",
       },
     },
   },
@@ -30,18 +31,23 @@ const calendarStore = useCalendarStore()
 const eventsV2 = ref()
 
 onBeforeMount(async () => {
-  eventsV2.value = await calendarStore.getSonarrCalendar()
+  eventsV2.value = await calendarStore.getEvents()
 })
 
 function updateTimeframe($event: { start: string, end: string}) {
   const { start, end } = $event
-  calendarStore.getSonarrCalendar(start, end)
+  calendarStore.getEvents(start, end)
 }
 
 </script>
 
 <template>
-  <Qalendar :events="eventsV2" @updated-period="updateTimeframe($event)" :config="qalendarConfig" />
+  <Qalendar :events="eventsV2" @updated-period="updateTimeframe($event)" :config="qalendarConfig">
+    <!-- make a template for this and install tailwind -->
+    <template #monthEvent="monthEventProps">
+      <span>{{ monthEventProps.eventData.title }}</span>
+    </template>
+  </Qalendar>
 </template>
 
 <style>

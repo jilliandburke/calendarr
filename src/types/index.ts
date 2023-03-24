@@ -11,6 +11,14 @@ export interface SonarrEvent {
   hasFile: boolean,
   id: number
 }
+export interface RadarrEvent {
+  title: string,
+  digitalRelease: string,
+  inCinemas?: string,
+  overview: string,
+  hasFile: boolean,
+  id: number
+}
 
 export interface CalendarEvent {
   title: string,
@@ -18,9 +26,10 @@ export interface CalendarEvent {
     start: string,
     end: string
   },
-  seasonNumber: number,
-  episodeNumber: number,
+  seasonNumber?: number,
+  episodeNumber?: number,
   description: string,
   colorScheme: string,
-  id: number
+  id: number,
+  isCustom: boolean
 }
