@@ -7,13 +7,13 @@ const now = Date.now()
 const currentMonthStart = startOfMonth(now).toUTCString()
 const currentMonthEnd = endOfMonth(now).toUTCString()
 
-function radarrApiUrl(endpoint: string, start = currentMonthStart, end = currentMonthEnd) {
-  return `https://radarr.plexbox.dev/api/${endpoint}?apikey=${config.radarrApiKey}&includeSeries=true&start=${start}&end=${end}`
+function radarrApiUrl(start = currentMonthStart, end = currentMonthEnd) {
+  return `${config.radarrApiUrl}/v3/calendar?apikey=${config.radarrApiKey}&includeSeries=true&start=${start}&end=${end}`
 }
 
 const getRadarrCalendar = async (start?: string, end?: string) => {
   try {
-    const data = await axios.get(radarrApiUrl('v3/calendar', start, end))
+    const data = await axios.get(radarrApiUrl(start, end))
 
     return data
   } catch (error) {

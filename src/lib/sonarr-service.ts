@@ -7,13 +7,13 @@ const now = Date.now()
 const currentMonthStart = startOfMonth(now).toUTCString()
 const currentMonthEnd = endOfMonth(now).toUTCString()
 
-function sonarrApiUrl(endpoint: string, start = currentMonthStart, end = currentMonthEnd) {
-  return `https://sonarr.plexbox.dev/api/${endpoint}?apikey=${config.sonarrApiKey}&includeSeries=true&start=${start}&end=${end}`
+function sonarrApiUrl(start = currentMonthStart, end = currentMonthEnd) {
+  return `${config.sonarrApiUrl}/v3/calendar?apikey=${config.sonarrApiKey}&includeSeries=true&start=${start}&end=${end}`
 }
 
 const getSonarrCalendar = async (start?: string , end?: string) => {
   try {
-    const data = await axios.get(sonarrApiUrl('v3/calendar', start, end))
+    const data = await axios.get(sonarrApiUrl(start, end))
 
     return data
   } catch(error) {
