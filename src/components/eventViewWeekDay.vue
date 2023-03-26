@@ -23,7 +23,7 @@ function serviceIcon(event: CalendarEvent | any) {
 </script>
 
 <template>
-  <div class='flex flex-row shrink-0 w-100 items-stretch mt-1 mx-2 rounded min-h-fit border border-zinc-500'>
+  <div class='flex flex-row shrink-0 w-100 items-stretch mt-1 mx-2 rounded min-h-fit max-h-fit bg-zinc-800 border border-zinc-500'>
     <div class='w-2 rounded-l-sm bg-green-600' v-if='event.onServer'></div>
     <div class='w-2 rounded-l-sm bg-red-600' v-if='!event.onServer'></div>
     <div class='flex flex-row py-1'>

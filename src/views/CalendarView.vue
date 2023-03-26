@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { Qalendar } from "qalendar";
+import { Qalendar } from 'qalendar'
 import { useCalendarStore } from '../stores/calendar'
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue'
+import EventViewMonth from '../components/eventViewMonth.vue'
+import EventViewWeekDay from '../components/eventViewWeekDay.vue'
 
 const qalendarConfig = {
   defaultMode: 'month',
@@ -38,14 +40,15 @@ function updateTimeframe($event: { start: string, end: string}) {
   const { start, end } = $event
   calendarStore.getEvents(start, end)
 }
-
 </script>
 
 <template>
   <Qalendar :events="eventsV2" @updated-period="updateTimeframe($event)" :config="qalendarConfig">
-    <!-- make a template for this and install tailwind -->
     <template #monthEvent="monthEventProps">
-      <span>{{ monthEventProps.eventData.title }}</span>
+      <EventViewMonth :event='monthEventProps.eventData' />
+    </template>
+    <template #weekDayEvent="eventProps">
+      <EventViewWeekDay :event='eventProps.eventData' />
     </template>
   </Qalendar>
 </template>
@@ -56,7 +59,7 @@ function updateTimeframe($event: { start: string, end: string}) {
 .event-flyout__relative-wrapper,
 .date-picker__week-picker,
 .calendar-header__mode-options {
-  background-color: var(--color-background) !important;
+  background-color: #27272a !important;
 }
 
 .date-picker__week-picker-navigation .is-icon {
@@ -69,6 +72,25 @@ function updateTimeframe($event: { start: string, end: string}) {
 
 .calendar-month__event:hover {
   background-color: rgb(66 66 66) !important;
+}
+
+.calendar-month__weekday-more,
+.calendar-month__day-name,
+.calendar-month__day-date {
+  color: white !important;
+}
+
+.calendar-month__weekday-more {
+  margin-top: 8px !important;
+  margin-left: 10px !important;
+}
+
+.calendar-month__weekday {
+  padding: 0 5px 15px 5px !important;
+}
+
+.calendar-week__event {
+  border: none !important;
 }
 
 .event-flyout__menu-close {

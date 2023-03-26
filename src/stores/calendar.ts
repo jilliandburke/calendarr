@@ -52,12 +52,14 @@ export const useCalendarStore = defineStore('calendar', () => {
     rawEvents.forEach((event: SonarrEvent) => {
       sonarrEvents.push({
         title: event.title,
+        series: event.series.title,
         time: formatStartEndTimes(event.airDate, event.series.airTime, event.series.runtime),
         seasonNumber: event.seasonNumber,
         episodeNumber: event.episodeNumber,
         description: event.overview,
-        colorScheme: event.hasFile ? 'sonarrDownloaded' : 'sonarr',
+        onServer: event.hasFile,
         id: event.id,
+        service: 'sonarr',
         isCustom: true
       })
     })
@@ -75,8 +77,9 @@ export const useCalendarStore = defineStore('calendar', () => {
           end: releaseDate.substring(0, 10)
         },
         description: event.overview,
-        colorScheme: event.hasFile ? 'radarrDownloaded' : 'radarr',
+        onServer: event.hasFile,
         id: event.id,
+        service: 'radarr',
         isCustom: true
       })
     })
@@ -85,7 +88,7 @@ export const useCalendarStore = defineStore('calendar', () => {
   function formatStartEndTimes(airDate: string, airTime: string, runtime: number) {
     const calculatedEndTime = add(new Date(`${airDate} ${airTime}`), { minutes: runtime })
     const start = `${airDate} ${airTime}`
-    const end = format(calculatedEndTime, 'y-MM-dd hh:mm')
+    const end = format(calculatedEndTime, 'y-MM-dd HH:mm')
 
     return {
       start,

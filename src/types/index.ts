@@ -2,6 +2,7 @@ export interface SonarrEvent {
   title: string,
   airDate: string,
   series: {
+    title: string,
     airTime: string,
     runtime: number,
   }
@@ -22,6 +23,7 @@ export interface RadarrEvent {
 
 export interface CalendarEvent {
   title: string,
+  series?: string,
   time: {
     start: string,
     end: string
@@ -29,7 +31,8 @@ export interface CalendarEvent {
   seasonNumber?: number,
   episodeNumber?: number,
   description: string,
-  colorScheme: string,
+  onServer: boolean,
   id: number,
-  isCustom: boolean
+  service: 'sonarr' | 'radarr',
+  isCustom?: boolean
 }
