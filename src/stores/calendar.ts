@@ -1,35 +1,42 @@
+import { ref } from 'vue' 
 import { defineStore } from 'pinia'
 import sonarr from '@/lib/sonarr-service'
 import radarr from '@/lib/radarr-service'
-import { add, format } from 'date-fns'
+import { add, format, formatRFC3339 } from 'date-fns'
 import type { SonarrEvent, RadarrEvent, CalendarEvent } from '@/types'
 
 export const useCalendarStore = defineStore('calendar', () => {
   let sonarrEvents: CalendarEvent[] = []
   let radarrEvents: CalendarEvent[] = []
-  let events: CalendarEvent[] = []
+  const events = ref<CalendarEvent[]>([])
 
-  async function getEvents(service?: string, start?: string, end?: string) {
-    events = []
+  async function getEvents(start?: string, end?: string, service?: string) {
+    events.value = []
     if (service && service === 'sonarr') {
       await getSonarrCalendar(start, end)
-      events.push(...sonarrEvents)
+      events.value.push(...sonarrEvents)
     } else if (service && service === 'radarr') {
       await getRadarrCalendar(start, end)
-      events = radarrEvents
+      events.value = radarrEvents
     } else {
       await getSonarrCalendar(start, end)
       await getRadarrCalendar(start, end)
 
-      events = sonarrEvents.concat(radarrEvents)
+      events.value = sonarrEvents.concat(radarrEvents)
     }
-
-    return events
   }
 
   async function getSonarrCalendar(start?: string, end?: string) {
     try {
-      const data = await sonarr.getSonarrCalendar(formatToDate(start), formatToDate(end));
+      let data;
+      const startDate = start ? new Date(start) : undefined
+      const endDate = end ? new Date(end) : undefined
+
+      if (startDate && endDate) {
+        data = await sonarr.getSonarrCalendar(formatRFC3339(startDate), formatRFC3339(endDate));
+      } else {
+        data = await sonarr.getSonarrCalendar()
+      }
 
       formatSonarrEvents(data?.data)
     } catch (error) {
@@ -39,7 +46,15 @@ export const useCalendarStore = defineStore('calendar', () => {
 
   async function getRadarrCalendar(start?: string, end?: string) {
     try {
-      const data = await radarr.getRadarrCalendar(formatToDate(start), formatToDate(end));
+      let data;
+      const startDate = start ? new Date(start) : undefined
+      const endDate = end ? new Date(end) : undefined
+
+      if (startDate && endDate) {
+        data = await radarr.getRadarrCalendar(formatRFC3339(startDate), formatRFC3339(endDate));
+      } else {
+        data = await radarr.getRadarrCalendar()
+      }
 
       formatRadarrEvents(data?.data)
     } catch (error) {
@@ -57,6 +72,7 @@ export const useCalendarStore = defineStore('calendar', () => {
         seasonNumber: event.seasonNumber,
         episodeNumber: event.episodeNumber,
         description: event.overview,
+        slug: event.series.titleSlug,
         onServer: event.hasFile,
         id: event.id,
         service: 'sonarr',
@@ -76,8 +92,12 @@ export const useCalendarStore = defineStore('calendar', () => {
           start: releaseDate.substring(0, 10),
           end: releaseDate.substring(0, 10)
         },
+        year: event.year,
+        runtime: formatRuntime(event.runtime),
+        rating: event.ratings.tmdb.value.toFixed(1),
         description: event.overview,
         onServer: event.hasFile,
+        slug: event.titleSlug,
         id: event.id,
         service: 'radarr',
         isCustom: true
@@ -96,13 +116,12 @@ export const useCalendarStore = defineStore('calendar', () => {
     }
   }
 
-  function formatToDate(date: string | undefined) {
-    if (typeof date === 'string') {
-      const temp = new Date(date)
+  function formatRuntime(runtime: number) {
+    const hours = Math.floor(runtime / 60);
+    const minutes = runtime % 60;
 
-      return temp.toUTCString()
-    }
+    return `${hours}h ${minutes}m`;
   }
 
-  return { getSonarrCalendar, getRadarrCalendar, getEvents }
+  return { getSonarrCalendar, getRadarrCalendar, getEvents, events }
 })

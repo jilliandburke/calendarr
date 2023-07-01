@@ -1,11 +1,11 @@
 import axios from 'axios'
 import config from '@/config'
-import { startOfMonth, endOfMonth } from 'date-fns'
+import { startOfMonth, endOfMonth, formatRFC3339 } from 'date-fns'
 
 // Get default timeframe (current month)
 const now = Date.now()
-const currentMonthStart = startOfMonth(now).toUTCString()
-const currentMonthEnd = endOfMonth(now).toUTCString()
+const currentMonthStart = formatRFC3339(startOfMonth(now))
+const currentMonthEnd = formatRFC3339(endOfMonth(now))
 
 function sonarrApiUrl(start = currentMonthStart, end = currentMonthEnd) {
   return `${config.sonarrApiUrl}/v3/calendar?apikey=${config.sonarrApiKey}&includeSeries=true&start=${start}&end=${end}`

@@ -1,3 +1,12 @@
+export interface CalendarEmittedEvent {
+  start?: string,
+  end?: string,
+  mode?: string,
+  period?: {
+    start: string,
+    end: string
+  }
+}
 export interface SonarrEvent {
   title: string,
   airDate: string,
@@ -5,6 +14,7 @@ export interface SonarrEvent {
     title: string,
     airTime: string,
     runtime: number,
+    titleSlug: string
   }
   seasonNumber: number,
   episodeNumber: number,
@@ -17,7 +27,15 @@ export interface RadarrEvent {
   digitalRelease: string,
   inCinemas?: string,
   overview: string,
+  year: number,
+  runtime: number,
+  ratings: {
+    tmdb: {
+      value: number
+    }
+  }
   hasFile: boolean,
+  titleSlug: string,
   id: number
 }
 
@@ -28,9 +46,13 @@ export interface CalendarEvent {
     start: string,
     end: string
   },
+  year?: number,
+  runtime?: string,
   seasonNumber?: number,
   episodeNumber?: number,
+  rating?: number | string,
   description: string,
+  slug: string,
   onServer: boolean,
   id: number,
   service: 'sonarr' | 'radarr',
