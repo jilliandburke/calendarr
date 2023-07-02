@@ -28,12 +28,12 @@ export const useCalendarStore = defineStore('calendar', () => {
 
   async function getSonarrCalendar(start?: string, end?: string) {
     try {
-      let data;
+      let data
       const startDate = start ? new Date(start) : undefined
       const endDate = end ? new Date(end) : undefined
 
       if (startDate && endDate) {
-        data = await sonarr.getSonarrCalendar(formatRFC3339(startDate), formatRFC3339(endDate));
+        data = await sonarr.getSonarrCalendar(formatRFC3339(startDate), formatRFC3339(endDate))
       } else {
         data = await sonarr.getSonarrCalendar()
       }
@@ -46,12 +46,12 @@ export const useCalendarStore = defineStore('calendar', () => {
 
   async function getRadarrCalendar(start?: string, end?: string) {
     try {
-      let data;
+      let data
       const startDate = start ? new Date(start) : undefined
       const endDate = end ? new Date(end) : undefined
 
       if (startDate && endDate) {
-        data = await radarr.getRadarrCalendar(formatRFC3339(startDate), formatRFC3339(endDate));
+        data = await radarr.getRadarrCalendar(formatRFC3339(startDate), formatRFC3339(endDate))
       } else {
         data = await radarr.getRadarrCalendar()
       }
@@ -117,10 +117,10 @@ export const useCalendarStore = defineStore('calendar', () => {
   }
 
   function formatRuntime(runtime: number) {
-    const hours = Math.floor(runtime / 60);
-    const minutes = runtime % 60;
+    const hours = Math.floor(runtime / 60)
+    const minutes = runtime % 60
 
-    return `${hours}h ${minutes}m`;
+    return `${hours}h ${minutes}m`
   }
 
   return { getSonarrCalendar, getRadarrCalendar, getEvents, events }

@@ -49,7 +49,7 @@ const qalendarConfig = {
   },
 }
 const calendarStore = useCalendarStore()
-const events = computed(() => calendarStore.events);
+const events = computed(() => calendarStore.events)
 
 onBeforeMount(async () => {
   await calendarStore.getEvents()
@@ -118,4 +118,8 @@ async function updateTimeframe(event: CalendarEmittedEvent) {
 .event-flyout__menu-close {
   z-index: 100;
 }
+
+/* .qalendar-is-small .calendar-month__event {
+  background-color: #f59e0b !important;
+} */
 </style>

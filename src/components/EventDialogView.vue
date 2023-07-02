@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import type { CalendarEvent } from '../types'
-import config from '@/config';
+import config from '@/config'
 
 defineProps({
   eventDialog: {
@@ -43,10 +43,10 @@ defineProps({
   event: {
     type: Object,
   }
-});
+})
 
 function formatServiceName(service: string) {
-  return service.charAt(0).toUpperCase() + service.slice(1);
+  return service.charAt(0).toUpperCase() + service.slice(1)
 }
 
 function serviceLink(event: CalendarEvent | any) {
