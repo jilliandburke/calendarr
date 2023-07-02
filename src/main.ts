@@ -3,6 +3,8 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import { plugin, defaultConfig } from '@formkit/vue'
+import config from '../formkit.config'
 
 import './assets/main.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -13,6 +15,7 @@ const app = createApp(App)
 library.add(faTv, faFilm, faCircleCheck, faClose, faArrowUpRightFromSquare, faStar)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.use(plugin, defaultConfig(config))
 app.use(createPinia())
 app.use(router)
 
