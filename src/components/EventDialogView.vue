@@ -32,8 +32,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { CalendarEvent } from '../types'
-import config from '@/config'
+import { useConfigStore } from '@/stores/config-store'
+
+const configStore = useConfigStore()
+const sonarrUrl = computed(() => { return configStore.currentConfig.sonarrUrl })
+const radarrUrl = computed(() => { return configStore.currentConfig.radarrUrl })
 
 defineProps({
   eventDialog: {
@@ -51,11 +56,11 @@ function formatServiceName(service: string) {
 
 function serviceLink(event: CalendarEvent | any) {
   if (event.service === 'sonarr') {
-    return `${config.sonarrUrl}series/${event.slug}`
+    return `${sonarrUrl.value}series/${event.slug}`
   }
 
   if (event.service === 'radarr') {
-    return `${config.radarrUrl}movie/${event.slug}`
+    return `${radarrUrl.value}movie/${event.slug}`
   }
 }
 </script>

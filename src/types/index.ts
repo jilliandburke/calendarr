@@ -58,3 +58,15 @@ export interface CalendarEvent {
   service: 'sonarr' | 'radarr',
   isCustom?: boolean
 }
+
+export interface ConfigObject {
+  sonarrUrl: string,
+  sonarrApiKey: string,
+  radarrUrl: string,
+  radarrApiKey: string
+}
+
+export interface ServiceConfig {
+  url: string,
+  apiKey: string
+}

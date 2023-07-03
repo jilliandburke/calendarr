@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { Qalendar } from 'qalendar'
 import { computed, onBeforeMount } from 'vue'
-import { useCalendarStore } from '../stores/calendar'
+import { useCalendarStore } from '../stores/calendar-store'
 import type { CalendarEmittedEvent } from '@/types'
 import EventViewMonth from '../components/EventViewMonth.vue'
 import EventDialogView from '../components/EventDialogView.vue'
