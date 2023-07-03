@@ -109,6 +109,15 @@ async function updateTimeframe(event: CalendarEmittedEvent) {
   padding: 0 !important;
 }
 
+.agenda__header-day-name {
+  color: #ffffff !important;
+}
+
+.agenda__header-date,
+.agenda__event.is-event {
+  background-color: #9f1239 !important;
+}
+
 .date-picker__value-display:hover,
 .calendar-header__mode-picker:hover,
 .calendar-header__mode-option:hover {
