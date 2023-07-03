@@ -1,22 +1,48 @@
 <template>
-  <Qalendar :events="events" @updated-period="updateTimeframe($event)" @updated-mode="updateTimeframe($event)" :config="qalendarConfig" style="color-scheme: dark">
-    <template #eventDialog="eventDialogProps">
-      <EventDialogView :eventDialog='eventDialogProps' :event='eventDialogProps?.eventDialogData' class='rounded border border-white' />
-    </template>
-    <template #monthEvent="monthEventProps">
-      <EventViewMonth :event='monthEventProps.eventData' />
-    </template>
-    <template #weekDayEvent="eventProps">
-      <EventViewWeekDay :event='eventProps.eventData' />
-    </template>
-  </Qalendar>
+  <div class="flex flex-col items-center h-full">
+    <AlertMessage variant="warning" v-if="!hasConfiguration" class="mb-8 w-2/3">
+      <template #title> Setup Needed </template>
+      <template #description>
+        <p class="mb-3 w-4/5">
+          Welcome to Calendarr! In order for the calendar to have access to your servers please
+          enter Sonarr and Radarr details on the Settings page.
+        </p>
+        <router-link to="settings" class="font-bold underline">View Settings</router-link>
+      </template>
+    </AlertMessage>
+
+    <Qalendar
+      :events="events"
+      @updated-period="updateTimeframe($event)"
+      @updated-mode="updateTimeframe($event)"
+      :config="qalendarConfig"
+      style="color-scheme: dark"
+      v-if="hasConfiguration"
+    >
+      <template #eventDialog="eventDialogProps">
+        <EventDialogView
+          :eventDialog="eventDialogProps"
+          :event="eventDialogProps?.eventDialogData"
+          class="rounded border border-white"
+        />
+      </template>
+      <template #monthEvent="monthEventProps">
+        <EventViewMonth :event="monthEventProps.eventData" />
+      </template>
+      <template #weekDayEvent="eventProps">
+        <EventViewWeekDay :event="eventProps.eventData" />
+      </template>
+    </Qalendar>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Qalendar } from 'qalendar'
 import { computed, onBeforeMount } from 'vue'
 import { useCalendarStore } from '../stores/calendar-store'
+import { useConfigStore } from '../stores/config-store'
 import type { CalendarEmittedEvent } from '@/types'
+import AlertMessage from '@/components/AlertMessage.vue'
 import EventViewMonth from '../components/EventViewMonth.vue'
 import EventDialogView from '../components/EventDialogView.vue'
 import EventViewWeekDay from '../components/EventViewWeekDay.vue'
@@ -30,26 +56,28 @@ const qalendarConfig = {
   style: {
     colorSchemes: {
       sonarr: {
-        color: "#fff",
-        backgroundColor: "#2193b5",
+        color: '#fff',
+        backgroundColor: '#2193b5'
       },
       sonarrDownloaded: {
-        color: "#fff",
-        backgroundColor: "#2E7D32",
+        color: '#fff',
+        backgroundColor: '#2E7D32'
       },
       radarr: {
-        color: "#fff",
-        backgroundColor: "#ffc230",
+        color: '#fff',
+        backgroundColor: '#ffc230'
       },
       radarrDownloaded: {
-        color: "#fff",
-        backgroundColor: "#2E7D32",
-      },
-    },
-  },
+        color: '#fff',
+        backgroundColor: '#2E7D32'
+      }
+    }
+  }
 }
 const calendarStore = useCalendarStore()
+const configStore = useConfigStore()
 const events = computed(() => calendarStore.events)
+const hasConfiguration = computed(() => configStore.currentConfig)
 
 onBeforeMount(async () => {
   await calendarStore.getEvents()
@@ -60,11 +88,10 @@ async function updateTimeframe(event: CalendarEmittedEvent) {
   const end = event.period ? event.period.end : event.end
   await calendarStore.getEvents(start, end)
 }
-
 </script>
 
 <style>
-@import "qalendar/dist/style.css";
+@import 'qalendar/dist/style.css';
 
 .calendar-root {
   border-color: white !important;
@@ -92,8 +119,8 @@ async function updateTimeframe(event: CalendarEmittedEvent) {
 
 .week-timeline__event {
   background-color: #9f1239 !important;
-  padding: .5rem !important;
-  font-size: .75rem !important;
+  padding: 0.5rem !important;
+  font-size: 0.75rem !important;
   height: auto !important;
   cursor: pointer !important;
 }
