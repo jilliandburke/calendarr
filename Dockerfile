@@ -10,5 +10,5 @@ COPY db ./db
 RUN yarn build
 RUN yarn knex migrate:latest
 
-EXPOSE 5173
+EXPOSE 5173 3333
 CMD ["yarn", "production"]

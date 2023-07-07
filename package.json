@@ -10,7 +10,7 @@
     "build-only": "vite build",
     "backend": "concurrently \"npx tsc --watch\" \"nodemon -q express.ts\"",
     "api": "ts-node express.ts",
-    "production": "concurrently --kill-others \"yarn dev --host\" \"yarn api\"",
+    "production": "concurrently --kill-others \"yarn api\" \"yarn dev --host\"",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
