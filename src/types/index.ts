@@ -60,6 +60,7 @@ export interface CalendarEvent {
 }
 
 export interface ConfigObject {
+  configId: number,
   sonarrUrl: string,
   sonarrApiKey: string,
   radarrUrl: string,

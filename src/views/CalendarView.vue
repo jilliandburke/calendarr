@@ -80,7 +80,12 @@ const events = computed(() => calendarStore.events)
 const hasConfiguration = computed(() => configStore.currentConfig)
 
 onBeforeMount(async () => {
-  await calendarStore.getEvents()
+  try {
+    await configStore.readConfig()
+    await calendarStore.getEvents()
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 async function updateTimeframe(event: CalendarEmittedEvent) {

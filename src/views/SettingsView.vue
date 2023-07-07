@@ -1,12 +1,12 @@
 <template>
   <div>
-    <FormKit type="form" @submit="submitForm" v-if='currentConfig'>
+    <FormKit type="form" @submit="submitForm">
       <FormKit
         type="url"
         name="sonarrUrl"
         id="sonarrUrl"
         label="Sonarr URL"
-        :value='currentConfig.sonarrUrl'
+        :value="currentConfig?.sonarrUrl"
         validation="required|url"
         help="Enter the URL of your Sonarr installation"
         placeholder="http://localhost:8989"
@@ -21,7 +21,7 @@
         name="sonarrApiKey"
         id="sonarrApiKey"
         label="Sonarr API Key"
-        :value='currentConfig.sonarrApiKey'
+        :value="currentConfig?.sonarrApiKey"
         validation="required"
         help="Enter your Sonarr API key. This can be found in the General section of settings."
         :input-class="{
@@ -35,7 +35,7 @@
         name="radarrUrl"
         id="radarrURL"
         label="Radarr URL"
-        :value='currentConfig.radarrUrl'
+        :value="currentConfig?.radarrUrl"
         validation="required|url"
         help="Enter the URL of your Radarr installation"
         placeholder="http://localhost:7878"
@@ -50,7 +50,7 @@
         name="radarrApiKey"
         id="radarrApiKey"
         label="Radarr API Key"
-        :value='currentConfig.radarrApiKey'
+        :value="currentConfig?.radarrApiKey"
         validation="required"
         help="Enter your Radarr API key. This can be found in the General section of settings."
         :input-class="{
@@ -62,13 +62,20 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useConfigStore } from '@/stores/config-store'
 
-const configStore = useConfigStore();
+const configStore = useConfigStore()
 
-const currentConfig = computed(() => configStore.currentConfig)
+const currentConfig = computed(() => {
+  return {
+    sonarrUrl: configStore.currentConfig?.sonarrUrl,
+    sonarrApiKey: configStore.currentConfig?.sonarrApiKey,
+    radarrUrl: configStore.currentConfig?.radarrUrl,
+    radarrApiKey: configStore.currentConfig?.radarrApiKey
+  }
+})
 
 const submitForm = async (fields: any) => {
   try {
@@ -79,4 +86,3 @@ const submitForm = async (fields: any) => {
   }
 }
 </script>
-

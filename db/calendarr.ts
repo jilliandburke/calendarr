@@ -7,13 +7,13 @@ const readConfig = () => {
 }
 
 const updateConfig = (body: ConfigObject) => {
-  // There will only ever be one config, therefore we will always update the first record
-  return knex('configs').where('configId', 1).update({
-    sonarrUrl: body.sonarrUrl,
-    sonarrApiKey: body.sonarrApiKey,
-    radarrUrl: body.radarrUrl,
-    radarrApiKey: body.radarrApiKey,
-  })
+  // Set the id since we know there will only ever be one config
+  body.configId = 1
+
+  // If the config doens't exist insert it, otherwise update it
+  return knex('configs').insert(body)
+  .onConflict('configId')
+  .merge()
 }
 
 export { readConfig, updateConfig }

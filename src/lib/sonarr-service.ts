@@ -9,6 +9,7 @@ const currentMonthEnd = formatRFC3339(endOfMonth(now))
 
 function sonarrApiUrl(sonarrConfig: ServiceConfig, start = currentMonthStart, end = currentMonthEnd) {
   const { url, apiKey } = sonarrConfig
+  console.log(url, apiKey)
   return `${url}/api/v3/calendar?apikey=${apiKey}&includeSeries=true&start=${start}&end=${end}`
 }
 

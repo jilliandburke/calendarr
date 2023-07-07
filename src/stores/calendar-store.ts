@@ -1,4 +1,4 @@
-import { ref } from 'vue' 
+import { ref, computed } from 'vue' 
 import { defineStore } from 'pinia'
 import sonarr from '@/lib/sonarr-service'
 import radarr from '@/lib/radarr-service'
@@ -13,7 +13,6 @@ export const useCalendarStore = defineStore('calendar', () => {
   const events = ref<CalendarEvent[]>([])
 
   const configStore = useConfigStore()
-  const sonarrConfig = configStore.sonarrConfig
   const radarrConfig = configStore.radarrConfig
 
   async function getEvents(start?: string, end?: string, service?: string) {
@@ -37,15 +36,15 @@ export const useCalendarStore = defineStore('calendar', () => {
       let data
       const startDate = start ? new Date(start) : undefined
       const endDate = end ? new Date(end) : undefined
-
-      if (!sonarrConfig) {
+      
+      if (!configStore.sonarrConfig) {
         return 'Configuration unset!'
       }
-
+      
       if (startDate && endDate) {
-        data = await sonarr.getSonarrCalendar(sonarrConfig, formatRFC3339(startDate), formatRFC3339(endDate))
+        data = await sonarr.getSonarrCalendar(configStore.sonarrConfig, formatRFC3339(startDate), formatRFC3339(endDate))
       } else {
-        data = await sonarr.getSonarrCalendar(sonarrConfig)
+        data = await sonarr.getSonarrCalendar(configStore.sonarrConfig)
       }
 
       formatSonarrEvents(data?.data)
@@ -60,14 +59,14 @@ export const useCalendarStore = defineStore('calendar', () => {
       const startDate = start ? new Date(start) : undefined
       const endDate = end ? new Date(end) : undefined
 
-      if (!radarrConfig) {
+       if (!configStore.radarrConfig) {
         return 'Configuration unset!'
       }
 
       if (startDate && endDate) {
-        data = await radarr.getRadarrCalendar(radarrConfig, formatRFC3339(startDate), formatRFC3339(endDate))
+        data = await radarr.getRadarrCalendar(configStore.radarrConfig, formatRFC3339(startDate), formatRFC3339(endDate))
       } else {
-        data = await radarr.getRadarrCalendar(radarrConfig)
+        data = await radarr.getRadarrCalendar(configStore.radarrConfig)
       }
 
       formatRadarrEvents(data?.data)
