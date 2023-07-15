@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue' 
+import { ref } from 'vue' 
 import { defineStore } from 'pinia'
 import sonarr from '@/lib/sonarr-service'
 import radarr from '@/lib/radarr-service'
@@ -13,7 +13,6 @@ export const useCalendarStore = defineStore('calendar', () => {
   const events = ref<CalendarEvent[]>([])
 
   const configStore = useConfigStore()
-  const radarrConfig = configStore.radarrConfig
 
   async function getEvents(start?: string, end?: string, service?: string) {
     events.value = []
