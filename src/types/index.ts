@@ -64,7 +64,8 @@ export interface ConfigObject {
   sonarrUrl: string,
   sonarrApiKey: string,
   radarrUrl: string,
-  radarrApiKey: string
+  radarrApiKey: string,
+  hostingUrl: string
 }
 
 export interface ServiceConfig {

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <FormKit type="form" @submit="submitForm">
+    <FormKit type="form" @submit="submitForm" v-if="currentConfig">
       <FormKit
         type="url"
         name="sonarrUrl"
         id="sonarrUrl"
         label="Sonarr URL"
-        :value="currentConfig?.sonarrUrl"
+        v-model="currentConfig.sonarrUrl"
         validation="required|url"
         help="Enter the URL of your Sonarr installation"
         placeholder="http://localhost:8989"
@@ -21,7 +21,7 @@
         name="sonarrApiKey"
         id="sonarrApiKey"
         label="Sonarr API Key"
-        :value="currentConfig?.sonarrApiKey"
+        v-model="currentConfig.sonarrApiKey"
         validation="required"
         help="Enter your Sonarr API key. This can be found in the General section of settings."
         :input-class="{
@@ -35,7 +35,7 @@
         name="radarrUrl"
         id="radarrURL"
         label="Radarr URL"
-        :value="currentConfig?.radarrUrl"
+        v-model="currentConfig.radarrUrl"
         validation="required|url"
         help="Enter the URL of your Radarr installation"
         placeholder="http://localhost:7878"
@@ -50,9 +50,23 @@
         name="radarrApiKey"
         id="radarrApiKey"
         label="Radarr API Key"
-        :value="currentConfig?.radarrApiKey"
+        v-model="currentConfig.radarrApiKey"
         validation="required"
         help="Enter your Radarr API key. This can be found in the General section of settings."
+        :input-class="{
+          'text-gray-700': false,
+          'text-gray-200': true
+        }"
+      />
+
+      <FormKit
+        type="text"
+        name="hostingUrl"
+        id="hostingUrl"
+        label="Hosting URL"
+        v-model="currentConfig.hostingUrl"
+        validation="required"
+        help="If you plan to host this from a specific URL, please enter it here"
         :input-class="{
           'text-gray-700': false,
           'text-gray-200': true
@@ -63,23 +77,36 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useConfigStore } from '@/stores/config-store'
+import { computed, onBeforeMount } from 'vue'
+import { useConfigStore } from '../stores/config-store'
 
 const configStore = useConfigStore()
+const currentConfig = computed(() => configStore.currentConfig)
 
-const currentConfig = computed(() => {
-  return {
-    sonarrUrl: configStore.currentConfig?.sonarrUrl,
-    sonarrApiKey: configStore.currentConfig?.sonarrApiKey,
-    radarrUrl: configStore.currentConfig?.radarrUrl,
-    radarrApiKey: configStore.currentConfig?.radarrApiKey
+onBeforeMount(async () => {
+  try {
+    await configStore.readConfig()
+  } catch (error) {
+    console.log(error)
   }
 })
 
+function cleanUrl(url: string) {
+  if (url.charAt(url.length - 1) == '/') {
+    return url = url.slice(0, -1);
+  }
+
+  return url
+}
+
 const submitForm = async (fields: any) => {
+  // Remove trailing forward slash from URLs if it exists
+  fields.sonarrUrl = cleanUrl(fields.sonarrUrl)
+  fields.radarrUrl = cleanUrl(fields.radarrUrl)
+
+  console.log(fields)
+
   try {
-    console.log(fields)
     await configStore.updateConfig(fields)
   } catch (error) {
     console.log(error)

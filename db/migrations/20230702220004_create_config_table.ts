@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('sonarrApiKey');
     table.string('radarrUrl');
     table.string('radarrApiKey');
+    table.string('hostingUrl');
     table.timestamps();
   })
 }
