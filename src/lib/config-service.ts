@@ -1,7 +1,9 @@
 import axios from 'axios'
 import type { ConfigObject } from '@/types'
+import { useConfigStore } from '@/stores/config-store'
 
-const configApiUrl = 'http://localhost:3333/config'
+const configStore = useConfigStore()
+const configApiUrl = configStore.currentConfig.hostingUrl ? configStore.currentConfig.hostingUrl : 'http://localhost:3333/config'
 
 const readConfig = async () => {
   try {
