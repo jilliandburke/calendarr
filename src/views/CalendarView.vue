@@ -43,9 +43,9 @@ import { useCalendarStore } from '../stores/calendar-store'
 import { useConfigStore } from '../stores/config-store'
 import type { CalendarEmittedEvent } from '@/types'
 import AlertMessage from '@/components/AlertMessage.vue'
-import EventViewMonth from '../components/EventViewMonth.vue'
-import EventDialogView from '../components/EventDialogView.vue'
-import EventViewWeekDay from '../components/EventViewWeekDay.vue'
+import EventViewMonth from '@/components/EventViewMonth.vue'
+import EventDialogView from '@/components/EventDialogView.vue'
+import EventViewWeekDay from '@/components/EventViewWeekDay.vue'
 
 const qalendarConfig = {
   defaultMode: 'month',
