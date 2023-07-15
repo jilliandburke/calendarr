@@ -9,7 +9,7 @@ const currentMonthEnd = formatRFC3339(endOfMonth(now))
 
 function radarrApiUrl(radarrConfig: ServiceConfig, start = currentMonthStart, end = currentMonthEnd) {
   const { url, apiKey } = radarrConfig
-  return `${url}/api/v3/calendar?apikey=${apiKey}&includeSeries=true&start=${start}&end=${end}`
+  return `${url}/api/v3/calendar?unmonitored=false&apikey=${apiKey}&start=${start}&end=${end}`
 }
 
 const getRadarrCalendar = async (radarrConfig: ServiceConfig, start?: string, end?: string) => {
